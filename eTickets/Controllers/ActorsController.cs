@@ -17,7 +17,7 @@ namespace eTickets.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var data = await _service.GetAll();
+            var data = await _service.GetAllAsync();
 
             return View(data);
         }
@@ -86,7 +86,7 @@ namespace eTickets.Controllers
 
         [HttpPost, ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
-        {
+         {
             var actor = await _service.GetByIdAsync(id);
 
             if (actor == null)

@@ -1,23 +1,101 @@
-﻿using eTickets.Data;
+﻿using eTickets.Data.Services;
+using eTickets.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace eTickets.Controllers
 {
     public class CinemasController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly ICinemasService _service;
 
-        public CinemasController(AppDbContext context)
+        public CinemasController(ICinemasService service)
         {
-            _context = context;
+            _service = service;
         }
         public async Task<IActionResult> Index()
         {
-            var cinemas = await _context.Cinemas.ToListAsync();
+            var cinemas = await _service.GetAllAsync();
 
             return View(cinemas);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var item = await _service.GetByIdAsync(id);
+
+            if (item == null)
+                return View("NotFound");
+
+            return View(item);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var item = await _service.GetByIdAsync(id);
+
+            if (item == null)
+            {
+                return View("NotFound");
+            }
+
+            return View(item);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var item = await _service.GetByIdAsync(id);
+
+            if (item == null)
+            {
+                return View("NotFound");
+            }
+
+            return View(item);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        #region Post actions
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Cinema input)
+        {
+            if (!ModelState.IsValid)
+                return View(input);
+
+            await _service.UpdateAsync(input);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmation(int id)
+        {
+            await _service.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Cinema input)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(input);
+            }
+
+            await _service.AddAsync(input);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        #endregion
+
     }
 }
