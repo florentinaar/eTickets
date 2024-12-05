@@ -52,6 +52,7 @@ namespace eTickets.Controllers
             if(user != null)
             {
                 var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
+
                 if (passwordCheck)
                 {
                     var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
@@ -109,9 +110,6 @@ namespace eTickets.Controllers
             return RedirectToAction("Index", "Movies");
 
         }
-
-
-
 
 
         #endregion
