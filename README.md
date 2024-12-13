@@ -1,4 +1,4 @@
-ntroduction to ASP.NET MVC
+ASP.NET MVC
 
 Models and ViewModels
 
@@ -30,4 +30,3 @@ Role-based UI rendering
 
 Dynamic rendering with ViewComponents
 
-Online payments using Paypal SDK
